@@ -3,9 +3,11 @@ import com.myj.pojo.Blog;
 import com.myj.utils.IDutils;
 import com.myj.utils.MybatisUtils;
 import com.sun.xml.internal.bind.v2.model.core.ID;
+import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +49,8 @@ public class MyTest {
         BlogMapper mapper = sqlSession.getMapper(BlogMapper.class);
         HashMap hashMap = new HashMap();
         hashMap.put("title","Java如此简单");
-        hashMap.put("author","狂神说");
-        hashMap.put("id","9b09ea562988494585d9d3509faec98b");
+//        hashMap.put("author","狂神说");
+//        hashMap.put("id","9b09ea562988494585d9d3509faec98b");
 //        hashMap.put("views",9999);
 
 //        List<Blog> blogs = mapper.queryBlogIF(hashMap);
@@ -57,7 +59,34 @@ public class MyTest {
 //            System.out.println(blog);
 //        }
 
-        mapper.updateBlog(hashMap);
+//        mapper.updateBlog(hashMap);
+
+        mapper.queryBlogIF(hashMap);
+
+        sqlSession.close();
+    }
+
+    @Test
+    public void queryBlogForeach(){
+
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        BlogMapper mapper = sqlSession.getMapper(BlogMapper.class);
+
+        HashMap map = new HashMap();
+
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        ids.add(1);
+        ids.add(2);
+
+
+        map.put("ids",ids);
+
+        List<Blog> blogs = mapper.queryBlogForeach(map);
+
+        for (Blog blog : blogs) {
+            System.out.println(blog);
+        }
+
 
         sqlSession.close();
     }
